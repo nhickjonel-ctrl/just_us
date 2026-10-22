@@ -1,398 +1,427 @@
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <title>Just Us ♡ — Our little corner</title>
-    <style>
-    :root{
-    --bg:#191530; --surface:#251f45; --line:#3a3263; --text:#f3eefb; --muted:#a59cc4;
-    --accent:#ff9bb0; --accent-ink:#2a1020; --warn:#ffc56b; --danger:#ff6b7f;
-    --serif:Georgia,"Iowan Old Style","Palatino Linotype",serif;
-    --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-    }
-    *{box-sizing:border-box;margin:0}
-    html,body{height:100%}
-    body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.5;
-    padding:env(safe-area-inset-top,0) env(safe-area-inset-right,0) env(safe-area-inset-bottom,0) env(safe-area-inset-left,0)}
-    h1{font-family:var(--serif);font-weight:400;font-size:clamp(2.4rem,8vw,4rem);line-height:1.05;letter-spacing:-.01em}
-    p{color:var(--muted);max-width:44ch}
-    .screen{display:none;min-height:100%;padding:24px;align-items:center;justify-content:center}
-    .screen.on{display:flex}
-    .card{width:100%;max-width:440px;display:flex;flex-direction:column;gap:20px}
-    .field{display:flex;flex-direction:column;gap:8px}
-    label,legend{font-size:.9rem;color:var(--muted)}
-    fieldset{border:0;padding:0;display:flex;flex-direction:column;gap:12px}
-    .seg{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--surface);padding:5px;border-radius:12px}
-    .seg button{background:transparent;color:var(--muted);border:0;padding:10px;border-radius:8px;font:inherit;cursor:pointer}
-    .seg button[aria-pressed=true]{background:var(--line);color:var(--text)}
-    input{background:var(--surface);border:1px solid var(--line);color:var(--text);font:inherit;font-size:1.1rem;padding:12px 14px;border-radius:12px;width:100%}
-    input[readonly]{font-size:.9rem;color:var(--muted)}
-    .btn{background:var(--accent);color:var(--accent-ink);border:0;border-radius:14px;padding:14px 20px;font:inherit;font-weight:600;cursor:pointer}
-    .btn:disabled{opacity:.6;cursor:default}
-    .btn.ghost{background:var(--surface);color:var(--text);font-weight:500}
-    button:focus-visible,input:focus-visible{outline:3px solid var(--warn);outline-offset:2px}
-    .row{display:flex;gap:10px}.row>*{flex:1}
-    .note{font-size:.85rem;color:var(--muted)}
-    .err{color:var(--danger);font-size:.95rem;min-height:1.4em}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Just Us ♡ — Our little corner</title>
+<style>
+:root{
+  --bg:#191530; --surface:#251f45; --line:#3a3263; --text:#f3eefb; --muted:#a59cc4;
+  --accent:#ff9bb0; --accent-ink:#2a1020; --warn:#ffc56b; --danger:#ff6b7f;
+  --serif:Georgia,"Iowan Old Style","Palatino Linotype",serif;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+*{box-sizing:border-box;margin:0}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.5;
+  padding:env(safe-area-inset-top,0) env(safe-area-inset-right,0) env(safe-area-inset-bottom,0) env(safe-area-inset-left,0)}
+h1{font-family:var(--serif);font-weight:400;font-size:clamp(2.4rem,8vw,4rem);line-height:1.05;letter-spacing:-.01em}
+p{color:var(--muted);max-width:44ch}
+.screen{display:none;min-height:100%;padding:24px;align-items:center;justify-content:center}
+.screen.on{display:flex}
+.card{width:100%;max-width:440px;display:flex;flex-direction:column;gap:20px}
+.field{display:flex;flex-direction:column;gap:8px}
+label,legend{font-size:.9rem;color:var(--muted)}
+fieldset{border:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--surface);padding:5px;border-radius:12px}
+.seg button{background:transparent;color:var(--muted);border:0;padding:10px;border-radius:8px;font:inherit;cursor:pointer}
+.seg button[aria-pressed=true]{background:var(--line);color:var(--text)}
+input{background:var(--surface);border:1px solid var(--line);color:var(--text);font:inherit;font-size:1.1rem;padding:12px 14px;border-radius:12px;width:100%}
+input[readonly]{font-size:.9rem;color:var(--muted)}
+.btn{background:var(--accent);color:var(--accent-ink);border:0;border-radius:14px;padding:14px 20px;font:inherit;font-weight:600;cursor:pointer}
+.btn:disabled{opacity:.6;cursor:default}
+.btn.ghost{background:var(--surface);color:var(--text);font-weight:500}
+button:focus-visible,input:focus-visible{outline:3px solid var(--warn);outline-offset:2px}
+.row{display:flex;gap:10px}.row>*{flex:1}
+.note{font-size:.85rem;color:var(--muted)}
+.err{color:var(--danger);font-size:.95rem;min-height:1.4em}
 
-    /* call */
-    #call{padding:0;position:relative;background:#0f0c1f;align-items:stretch}
-    #remote{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#0f0c1f}
-    #local{position:absolute;right:16px;top:28px;width:min(30vw,170px);aspect-ratio:3/4;object-fit:cover;border-radius:16px;
-    border:2px solid var(--line);transform:scaleX(-1);background:var(--surface);box-shadow:0 6px 24px rgba(0,0,0,.4)}
-    #drain{position:absolute;top:0;left:0;height:6px;width:100%;background:var(--accent);transform-origin:left;transition:background .4s}
-    #drain.warn{background:var(--warn)}#drain.crit{background:var(--danger)}
-    #clock{position:absolute;left:16px;top:22px;background:rgba(25,21,48,.78);backdrop-filter:blur(8px);
-    padding:8px 14px;border-radius:999px;font-variant-numeric:tabular-nums;font-size:1.15rem}
-    #clock.warn{color:var(--warn)}#clock.crit{color:var(--danger)}
-    #toast{position:absolute;left:50%;top:84px;transform:translateX(-50%);background:var(--surface);padding:10px 16px;border-radius:12px;opacity:0;transition:opacity .3s;pointer-events:none;text-align:center}
-    #toast.show{opacity:1}
-    #bar{position:absolute;left:0;right:0;bottom:0;padding:20px 20px calc(20px + env(safe-area-inset-bottom,0));display:flex;gap:12px;justify-content:center;
-    background:linear-gradient(transparent,rgba(15,12,31,.85))}
-    #bar button{border:0;border-radius:999px;min-width:56px;height:56px;padding:0 20px;background:var(--surface);color:var(--text);font:inherit;cursor:pointer}
-    #bar button[aria-pressed=true]{background:var(--text);color:var(--bg)}
-    #bar .end{background:var(--danger);color:#fff;font-weight:600}
-    @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+/* call */
+#call{padding:0;position:relative;background:#0f0c1f;align-items:stretch}
+#remote{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#0f0c1f}
+#local{position:absolute;right:16px;top:28px;width:min(30vw,170px);aspect-ratio:3/4;object-fit:cover;border-radius:16px;
+  border:2px solid var(--line);transform:scaleX(-1);background:var(--surface);box-shadow:0 6px 24px rgba(0,0,0,.4)}
+#drain{position:absolute;top:0;left:0;height:6px;width:100%;background:var(--accent);transform-origin:left;transition:background .4s}
+#drain.warn{background:var(--warn)}#drain.crit{background:var(--danger)}
+#clock{position:absolute;left:16px;top:22px;background:rgba(25,21,48,.78);backdrop-filter:blur(8px);
+  padding:8px 14px;border-radius:999px;font-variant-numeric:tabular-nums;font-size:1.15rem}
+#clock.warn{color:var(--warn)}#clock.crit{color:var(--danger)}
+#toast{position:absolute;left:50%;top:84px;transform:translateX(-50%);background:var(--surface);padding:10px 16px;border-radius:12px;opacity:0;transition:opacity .3s;pointer-events:none;text-align:center}
+#toast.show{opacity:1}
+#bar{position:absolute;left:0;right:0;bottom:0;padding:20px 20px calc(20px + env(safe-area-inset-bottom,0));display:flex;gap:12px;justify-content:center;
+  background:linear-gradient(transparent,rgba(15,12,31,.85))}
+#bar button{border:0;border-radius:999px;min-width:56px;height:56px;padding:0 20px;background:var(--surface);color:var(--text);font:inherit;cursor:pointer}
+#bar button[aria-pressed=true]{background:var(--text);color:var(--bg)}
+#bar .end{background:var(--danger);color:#fff;font-weight:600}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
 
-    /* Just Us — dreamy couple edition */
-    :root{--bg:#fff5f8;--surface:#fffafd;--line:#f5dbe7;--text:#57394e;--muted:#9c7d90;--accent:#f58faf;--accent-ink:#582b43;--warn:#d18b43;--danger:#df6485;--serif:Georgia,serif}
-    body{background:radial-gradient(ellipse at 12% 12%,#ffe0ed 0,transparent 37%),radial-gradient(ellipse at 90% 85%,#e9dcff 0,transparent 40%),#fff7fa;min-height:100%;}
-    body:before{content:'♡  ✦  ♡  ✧  ♡';position:fixed;top:6%;left:0;width:100%;text-align:center;letter-spacing:clamp(24px,7vw,90px);color:#e7a9c4;opacity:.42;font-size:25px;pointer-events:none}
-    .screen{min-height:100dvh;padding:28px 18px}
-    .card{position:relative;max-width:480px;background:rgba(255,255,255,.84);border:1px solid #fff;box-shadow:0 22px 70px #a65a8a20,0 3px 18px #a65a8a0c;border-radius:32px;padding:clamp(24px,5vw,42px);gap:18px;backdrop-filter:blur(18px)}
-    .card:before{content:'♡ our little corner of the universe';font-size:.76rem;letter-spacing:.06em;text-transform:uppercase;font-weight:750;color:#c77e9d;display:block;text-align:center}
-    h1{text-align:center;color:#a44e78;font-size:clamp(2.7rem,9vw,4.1rem);letter-spacing:-.045em}
-    p{text-align:center;margin:auto;line-height:1.7}
-    label,legend{color:#916c84;font-weight:650}
-    fieldset{background:#fff6fa;border:1px solid #f8e1ec;border-radius:22px;padding:17px;gap:14px}
-    .seg{background:#f8e7f0;border-radius:16px}.seg button{font-size:.87rem;border-radius:12px}.seg button[aria-pressed=true]{background:white;color:#aa5079;box-shadow:0 2px 10px #ba74912b}
-    input{background:white;border:1.5px solid #f0d7e4;color:#70465e;border-radius:14px}input:focus{border-color:#ed91b2}
-    .btn{border-radius:18px;padding:15px 20px;background:linear-gradient(125deg,#ff9db9,#f17fa8);color:#592a42;box-shadow:0 7px 18px #e884a64a;transition:transform .2s,box-shadow .2s}
-    .btn:hover{transform:translateY(-2px);box-shadow:0 10px 23px #e884a65a}.btn.ghost{background:#f9eaf2;color:#975578;box-shadow:none}
-    .note{text-align:center}.err{text-align:center}button{touch-action:manipulation}button:focus-visible,input:focus-visible{outline:3px solid #b58af0;outline-offset:3px}
-    #setup .card:after{content:'made for two hearts ♡';text-align:center;font-size:.78rem;color:#bf92aa}
-    #wait .card:before{content:'💌 a little love note is on its way'}
-    #join .card:before{content:'💗 someone special is waiting'}
-    #end .card:before{content:'♡ until our next little date'}
-    #call{background:#261b32}#remote{background:linear-gradient(145deg,#36263e,#5b3854)}
-    #local{border:3px solid #ffbbd2;border-radius:24px;box-shadow:0 10px 30px #0005}
-    #clock{background:#fff2f5ed;color:#864d70;font-weight:750;box-shadow:0 5px 22px #0002}
-    #toast{background:#fff4f8;color:#925271;border-radius:999px;box-shadow:0 6px 30px #0003;min-width:180px}
-    #bar{gap:9px;flex-wrap:wrap;padding:26px 12px calc(22px + env(safe-area-inset-bottom,0));background:linear-gradient(transparent,#24172ac9)}
-    #bar button{background:#fff1f6;color:#774c68;min-width:66px;height:56px;border:1px solid #ffd4e5;font-weight:650;box-shadow:0 5px 15px #0002}
-    #bar button[aria-pressed=true]{background:#e7d4ff;color:#653c7e}#bar .end{background:#ef7098;color:white;border-color:#ef7098}
-    #drain{height:7px;background:#ffb0ca}
-    @media(max-width:390px){.card{padding:25px 19px}.seg button{font-size:.78rem;padding:10px 6px}#bar button{min-width:60px;padding:0 12px;font-size:.82rem}#local{top:80px;width:112px}}
-    @media(prefers-reduced-motion:reduce){.btn{transition:none}}
-    </style>
-    </head>
-    <body>
+/* Just Us — dreamy couple edition */
+:root{--bg:#fff5f8;--surface:#fffafd;--line:#f5dbe7;--text:#57394e;--muted:#9c7d90;--accent:#f58faf;--accent-ink:#582b43;--warn:#d18b43;--danger:#df6485;--serif:Georgia,serif}
+body{background:radial-gradient(ellipse at 12% 12%,#ffe0ed 0,transparent 37%),radial-gradient(ellipse at 90% 85%,#e9dcff 0,transparent 40%),#fff7fa;min-height:100%;}
+body:before{content:'♡  ✦  ♡  ✧  ♡';position:fixed;top:6%;left:0;width:100%;text-align:center;letter-spacing:clamp(24px,7vw,90px);color:#e7a9c4;opacity:.42;font-size:25px;pointer-events:none}
+.screen{min-height:100dvh;padding:28px 18px}
+.card{position:relative;max-width:480px;background:rgba(255,255,255,.84);border:1px solid #fff;box-shadow:0 22px 70px #a65a8a20,0 3px 18px #a65a8a0c;border-radius:32px;padding:clamp(24px,5vw,42px);gap:18px;backdrop-filter:blur(18px)}
+.card:before{content:'♡ our little corner of the universe';font-size:.76rem;letter-spacing:.06em;text-transform:uppercase;font-weight:750;color:#c77e9d;display:block;text-align:center}
+h1{text-align:center;color:#a44e78;font-size:clamp(2.7rem,9vw,4.1rem);letter-spacing:-.045em}
+p{text-align:center;margin:auto;line-height:1.7}
+label,legend{color:#916c84;font-weight:650}
+fieldset{background:#fff6fa;border:1px solid #f8e1ec;border-radius:22px;padding:17px;gap:14px}
+.seg{background:#f8e7f0;border-radius:16px}.seg button{font-size:.87rem;border-radius:12px}.seg button[aria-pressed=true]{background:white;color:#aa5079;box-shadow:0 2px 10px #ba74912b}
+input{background:white;border:1.5px solid #f0d7e4;color:#70465e;border-radius:14px}input:focus{border-color:#ed91b2}
+.btn{border-radius:18px;padding:15px 20px;background:linear-gradient(125deg,#ff9db9,#f17fa8);color:#592a42;box-shadow:0 7px 18px #e884a64a;transition:transform .2s,box-shadow .2s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 23px #e884a65a}.btn.ghost{background:#f9eaf2;color:#975578;box-shadow:none}
+.note{text-align:center}.err{text-align:center}button{touch-action:manipulation}button:focus-visible,input:focus-visible{outline:3px solid #b58af0;outline-offset:3px}
+#setup .card:after{content:'made for two hearts ♡ (v5)';text-align:center;font-size:.78rem;color:#bf92aa}
+#wait .card:before{content:'💌 a little love note is on its way'}
+#join .card:before{content:'💗 someone special is waiting'}
+#end .card:before{content:'♡ until our next little date'}
+#call{background:#261b32}#remote{background:linear-gradient(145deg,#36263e,#5b3854)}
+#local{border:3px solid #ffbbd2;border-radius:24px;box-shadow:0 10px 30px #0005}
+#clock{background:#fff2f5ed;color:#864d70;font-weight:750;box-shadow:0 5px 22px #0002}
+#toast{background:#fff4f8;color:#925271;border-radius:999px;box-shadow:0 6px 30px #0003;min-width:180px}
+#bar{gap:9px;flex-wrap:wrap;padding:26px 12px calc(22px + env(safe-area-inset-bottom,0));background:linear-gradient(transparent,#24172ac9)}
+#bar button{background:#fff1f6;color:#774c68;min-width:66px;height:56px;border:1px solid #ffd4e5;font-weight:650;box-shadow:0 5px 15px #0002}
+#bar button[aria-pressed=true]{background:#e7d4ff;color:#653c7e}#bar .end{background:#ef7098;color:white;border-color:#ef7098}
+#drain{height:7px;background:#ffb0ca}
+#end-dbg{font-size:.75rem;opacity:.85;overflow-wrap:anywhere}
+#status{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:#fff4f8;color:#925271;padding:12px 20px;border-radius:999px;box-shadow:0 6px 30px #0003;text-align:center}
+@media(max-width:390px){.card{padding:25px 19px}.seg button{font-size:.78rem;padding:10px 6px}#bar button{min-width:60px;padding:0 12px;font-size:.82rem}#local{top:80px;width:112px}}
+@media(prefers-reduced-motion:reduce){.btn{transition:none}}
+</style>
+</head>
+<body>
 
-    <!-- Host: set up -->
-    <section class="screen" id="setup"><div class="card">
-    <h1>Just us. ♡</h1>
-    <p>A cozy little video date, just for the two of you. Set your time together and invite your favorite person. ✨</p>
-    <fieldset>
-        <legend>Our time together ⏳</legend>
-        <div class="seg">
-        <button type="button" id="m-dur" aria-pressed="true">For a little while</button>
-        <button type="button" id="m-clock" aria-pressed="false">Until a set time</button>
-        </div>
-        <div class="field" id="f-dur"><label for="mins">How many minutes of us-time?</label><input id="mins" type="number" min="1" max="600" value="30"></div>
-        <div class="field" id="f-clock" hidden><label for="clock-in">Ends at</label><input id="clock-in" type="time"></div>
-    </fieldset>
-    <button class="btn" id="create">Create our little room ♡</button>
-    <div class="err" id="setup-err"></div>
-    </div></section>
-
-    <!-- Host: waiting -->
-    <section class="screen" id="wait"><div class="card">
-    <h1>Waiting for my favorite person ♡</h1>
-    <p>Send your special someone this little invitation. Keep this tab open while you wait. 💌</p>
-    <input id="link" readonly aria-label="Call link">
-    <div class="row"><button class="btn" id="copy">Copy love link 💌</button><button class="btn ghost" id="cancel">Cancel</button></div>
-    <div class="note" id="wait-note"></div>
-    </div></section>
-
-    <!-- Guest: join -->
-    <section class="screen" id="join"><div class="card">
-    <h1>A date with your favorite person ♡</h1>
-    <p>Someone is waiting to see your lovely face! Allow camera and microphone to join.</p>
-    <button class="btn" id="join-btn">Join our date 💗</button>
-    <div class="err" id="join-err"></div>
-    </div></section>
-
-    <!-- In call -->
-    <section class="screen" id="call">
-    <video id="remote" autoplay playsinline></video>
-    <video id="local" autoplay playsinline muted></video>
-    <div id="drain"></div>
-    <div id="clock" aria-live="off">--:--</div>
-    <div id="toast" role="status"></div>
-    <div id="bar">
-        <button id="mic" aria-pressed="false">🎙️ Mute</button>
-        <button id="cam" aria-pressed="false">📷 Camera</button>
-        <button id="plus">💗 +5 min</button>
-        <button id="hang" class="end">💌 Bye</button>
+<!-- Host: set up -->
+<section class="screen" id="setup"><div class="card">
+  <h1>Just us. ♡</h1>
+  <p>A cozy little video date, just for the two of you. Set your time together and invite your favorite person. ✨</p>
+  <fieldset>
+    <legend>Our time together ⏳</legend>
+    <div class="seg">
+      <button type="button" id="m-dur" aria-pressed="true">For a little while</button>
+      <button type="button" id="m-clock" aria-pressed="false">Until a set time</button>
     </div>
-    </section>
+    <div class="field" id="f-dur"><label for="mins">How many minutes of us-time?</label><input id="mins" type="number" min="1" max="600" value="30"></div>
+    <div class="field" id="f-clock" hidden><label for="clock-in">Ends at</label><input id="clock-in" type="time"></div>
+  </fieldset>
+  <button class="btn" id="create">Create our little room ♡</button>
+  <div class="err" id="setup-err"></div>
+</div></section>
 
-    <!-- Ended -->
-    <section class="screen" id="end"><div class="card">
-    <h1 id="end-title">See you soon, love ♡</h1>
-    <p id="end-msg"></p>
-    <button class="btn" id="again">Another little date? ♡</button>
-    </div></section>
+<!-- Host: waiting -->
+<section class="screen" id="wait"><div class="card">
+  <h1>Waiting for my favorite person ♡</h1>
+  <p>Send your special someone this little invitation. Keep this tab open while you wait. 💌</p>
+  <input id="link" readonly aria-label="Call link">
+  <div class="row"><button class="btn" id="copy">Copy love link 💌</button><button class="btn ghost" id="cancel">Cancel</button></div>
+  <div class="note" id="wait-note"></div>
+</div></section>
 
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-    <script>
-    (function(){
-    /* ====== SETTINGS: fill these in ====== */
-    // Firebase console → Project settings → Your apps → Web app → firebaseConfig
-    const FIREBASE_CONFIG = {
-        apiKey: 'AIzaSyCY6Uv0_YeVxN0G0fYrmHkW1AhX7wyGjJY',
-        authDomain: 'justus-98a9c.firebaseapp.com',
-        projectId: 'justus-98a9c',
-        appId: '1:622297530264:web:98c24eebe196a968f9b5ed'
+<!-- Guest: join -->
+<section class="screen" id="join"><div class="card">
+  <h1>A date with your favorite person ♡</h1>
+  <p>Someone is waiting to see your lovely face! Allow camera and microphone to join.</p>
+  <button class="btn" id="join-btn">Join our date 💗</button>
+  <div class="err" id="join-err"></div>
+</div></section>
+
+<!-- In call -->
+<section class="screen" id="call">
+  <video id="remote" autoplay playsinline></video>
+  <video id="local" autoplay playsinline muted></video>
+  <div id="drain"></div>
+  <div id="clock" aria-live="off">--:--</div>
+  <div id="toast" role="status"></div>
+  <div id="status">Connecting to your person…</div>
+  <div id="bar">
+    <button id="mic" aria-pressed="false">🎙️ Mute</button>
+    <button id="cam" aria-pressed="false">📷 Camera</button>
+    <button id="plus">💗 +5 min</button>
+    <button id="hang" class="end">💌 Bye</button>
+  </div>
+</section>
+
+<!-- Ended -->
+<section class="screen" id="end"><div class="card">
+  <h1 id="end-title">See you soon, love ♡</h1>
+  <p id="end-msg"></p>
+  <p class="note" id="end-dbg"></p>
+  <button class="btn" id="again">Another little date? ♡</button>
+</div></section>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+(function(){
+  /* ====== SETTINGS: fill these in ====== */
+  // Firebase console → Project settings → Your apps → Web app → firebaseConfig
+  const FIREBASE_CONFIG = {
+    apiKey: 'AIzaSyCY6Uv0_YeVxN0G0fYrmHkW1AhX7wyGjJY',
+    authDomain: 'justus-98a9c.firebaseapp.com',
+    projectId: 'justus-98a9c',
+    appId: '1:622297530264:web:98c24eebe196a968f9b5ed'
+  };
+  // Optional: your deployed address, e.g. 'https://just-us.vercel.app/'. Leave '' to use the current address.
+  const SITE_URL = '';
+  /* ===================================== */
+
+  // Relay (TURN) servers help when your two networks can't connect directly.
+  // Paste the entries from your TURN provider's iceServers list between the brackets, e.g.
+  // [{urls:'turn:global.relay.metered.ca:80', username:'...', credential:'...'}, ...]
+  const TURN_USERNAME = '5f99f748dfcf88d14219ff8c';
+  const TURN_PASSWORD = 'PASTE_YOUR_PASSWORD_HERE';
+  const TURN_SERVERS = [
+    {urls:'stun:stun.relay.metered.ca:80'},
+    {urls:'turn:global.relay.metered.ca:80', username:TURN_USERNAME, credential:TURN_PASSWORD},
+    {urls:'turn:global.relay.metered.ca:80?transport=tcp', username:TURN_USERNAME, credential:TURN_PASSWORD},
+    {urls:'turn:global.relay.metered.ca:443', username:TURN_USERNAME, credential:TURN_PASSWORD},
+    {urls:'turns:global.relay.metered.ca:443?transport=tcp', username:TURN_USERNAME, credential:TURN_PASSWORD}
+  ];
+  const ICE = {iceServers:[{urls:['stun:stun.l.google.com:19302','stun:stun1.l.google.com:19302']}].concat(TURN_SERVERS)};
+  const $ = id => document.getElementById(id);
+  const screens = ['setup','wait','join','call','end'];
+  const show = n => screens.forEach(s => $(s).classList.toggle('on', s === n));
+
+  let db, pc, dc, roomRef, stream, unsubs = [], queue = [], cands = {}, remoteN = 0;
+  let endAt = 0, startedAt = 0, totalMs = 0, tick, isHost = false, ended = false, connected = false, joinTimer, dropTimer;
+  let mode = 'dur', pendingDur = 0, pendingClock = 0, warned5 = false, warned1 = false;
+  const roomFromUrl = () => new URLSearchParams(location.hash.slice(1)).get('r');
+
+  function initDb(){
+    if (db) return db;
+    if (!FIREBASE_CONFIG.apiKey) throw {code:'no-config'};
+    firebase.initializeApp(FIREBASE_CONFIG);
+    return db = firebase.firestore();
+  }
+  function explain(e){
+    if (e && e.code === 'no-config') return 'Add your Firebase settings at the top of index.html first.';
+    if (e && e.code === 'permission-denied') return 'Firestore blocked the request. Update the Firestore rules, then try again.';
+    return 'Something went wrong' + (e && (e.code || e.message) ? ' (' + (e.code || e.message) + ')' : '') + '. Try again.';
+  }
+
+  /* ---------- setup ---------- */
+  function setMode(m){
+    mode = m;
+    $('m-dur').setAttribute('aria-pressed', m === 'dur');
+    $('m-clock').setAttribute('aria-pressed', m === 'clock');
+    $('f-dur').hidden = m !== 'dur';
+    $('f-clock').hidden = m !== 'clock';
+  }
+  $('m-dur').onclick = () => setMode('dur');
+  $('m-clock').onclick = () => setMode('clock');
+
+  function nextClockTime(hhmm){
+    const [h, m] = hhmm.split(':').map(Number), d = new Date();
+    d.setHours(h, m, 0, 0);
+    if (d.getTime() <= Date.now() + 60000) d.setDate(d.getDate() + 1);
+    return d.getTime();
+  }
+  async function getMedia(){
+    if (stream) return stream;
+    stream = await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'}, audio:{echoCancellation:true, noiseSuppression:true}});
+    $('local').srcObject = stream;
+    return stream;
+  }
+
+  /* ---------- WebRTC helpers ---------- */
+  function newPC(candColl){
+    pc = new RTCPeerConnection(ICE);
+    stream.getTracks().forEach(t => pc.addTrack(t, stream));
+    pc.ontrack = e => { $('remote').srcObject = e.streams[0]; show('call'); };
+    pc.onicecandidate = e => { if (e.candidate){ cands[e.candidate.type] = (cands[e.candidate.type] || 0) + 1; roomRef.collection(candColl).add(e.candidate.toJSON()).catch(() => {}); } };
+    pc.onconnectionstatechange = () => {
+      const s = pc.connectionState;
+      if (s === 'connected'){ connected = true; clearTimeout(joinTimer); clearTimeout(dropTimer); $('status').hidden = true; }
+      if (s === 'disconnected' && !ended){ toast('Connection is unstable…'); dropTimer = setTimeout(() => finish('Connection lost', 'The connection dropped. Start a new call to try again.'), 12000); }
+      if (s === 'failed' && !ended) finish('Connection lost', failMsg());
     };
-    // Optional: your deployed address, e.g. 'https://just-us.vercel.app/'. Leave '' to use the current address.
-    const SITE_URL = '';
-    /* ===================================== */
-
-    const ICE = {iceServers:[{urls:['stun:stun.l.google.com:19302','stun:stun1.l.google.com:19302']}]};
-    const $ = id => document.getElementById(id);
-    const screens = ['setup','wait','join','call','end'];
-    const show = n => screens.forEach(s => $(s).classList.toggle('on', s === n));
-
-    let db, pc, dc, roomRef, stream, unsubs = [], queue = [];
-    let endAt = 0, startedAt = 0, totalMs = 0, tick, isHost = false, ended = false, connected = false, joinTimer, dropTimer;
-    let mode = 'dur', pendingDur = 0, pendingClock = 0, warned5 = false, warned1 = false;
-    const roomFromUrl = () => new URLSearchParams(location.hash.slice(1)).get('r');
-
-    function initDb(){
-        if (db) return db;
-        if (!FIREBASE_CONFIG.apiKey) throw {code:'no-config'};
-        firebase.initializeApp(FIREBASE_CONFIG);
-        return db = firebase.firestore();
-    }
-    function explain(e){
-        if (e && e.code === 'no-config') return 'Add your Firebase settings at the top of index.html first.';
-        if (e && e.code === 'permission-denied') return 'Firestore blocked the request. Update the Firestore rules, then try again.';
-        return 'Something went wrong' + (e && (e.code || e.message) ? ' (' + (e.code || e.message) + ')' : '') + '. Try again.';
-    }
-
-    /* ---------- setup ---------- */
-    function setMode(m){
-        mode = m;
-        $('m-dur').setAttribute('aria-pressed', m === 'dur');
-        $('m-clock').setAttribute('aria-pressed', m === 'clock');
-        $('f-dur').hidden = m !== 'dur';
-        $('f-clock').hidden = m !== 'clock';
-    }
-    $('m-dur').onclick = () => setMode('dur');
-    $('m-clock').onclick = () => setMode('clock');
-
-    function nextClockTime(hhmm){
-        const [h, m] = hhmm.split(':').map(Number), d = new Date();
-        d.setHours(h, m, 0, 0);
-        if (d.getTime() <= Date.now() + 60000) d.setDate(d.getDate() + 1);
-        return d.getTime();
-    }
-    async function getMedia(){
-        if (stream) return stream;
-        stream = await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'}, audio:{echoCancellation:true, noiseSuppression:true}});
-        $('local').srcObject = stream;
-        return stream;
-    }
-
-    /* ---------- WebRTC helpers ---------- */
-    function newPC(candColl){
-        pc = new RTCPeerConnection(ICE);
-        stream.getTracks().forEach(t => pc.addTrack(t, stream));
-        pc.ontrack = e => { $('remote').srcObject = e.streams[0]; show('call'); };
-        pc.onicecandidate = e => { if (e.candidate) roomRef.collection(candColl).add(e.candidate.toJSON()).catch(() => {}); };
-        pc.onconnectionstatechange = () => {
-        const s = pc.connectionState;
-        if (s === 'connected'){ connected = true; clearTimeout(joinTimer); clearTimeout(dropTimer); }
-        if (s === 'disconnected' && !ended){ toast('Connection is unstable…'); dropTimer = setTimeout(() => finish('Connection lost', 'The connection dropped. Start a new call to try again.'), 12000); }
-        if (s === 'failed' && !ended) finish('Connection lost', 'Your two networks couldn’t connect directly. Start a new call, or try a different network.');
-        };
-    }
-    function addCand(c){
-        if (pc && pc.remoteDescription) pc.addIceCandidate(new RTCIceCandidate(c)).catch(() => {});
-        else queue.push(c);
-    }
-    function flushCands(){ queue.splice(0).forEach(addCand); }
-    function watchCands(coll){
-        unsubs.push(roomRef.collection(coll).onSnapshot(s => s.docChanges().forEach(ch => { if (ch.type === 'added') addCand(ch.doc.data()); })));
-    }
-    const send = m => { if (dc && dc.readyState === 'open') dc.send(JSON.stringify(m)); };
-    function wireDC(ch){
-        dc = ch;
-        ch.onopen = () => {
-        if (isHost){
-            const now = Date.now();
-            startedAt = now;
-            endAt = mode === 'dur' ? now + pendingDur * 60000 : pendingClock;
-            totalMs = endAt - now;
-            send({type:'end', endAt, totalMs});
-            startClock();
-        }
-        };
-        ch.onmessage = e => {
-        const m = JSON.parse(e.data);
-        if (m.type === 'end'){ endAt = m.endAt; totalMs = m.totalMs; startedAt = Date.now(); startClock(); }
-        if (m.type === 'extend'){ endAt = m.endAt; totalMs = Math.max(totalMs, endAt - startedAt); warned5 = warned1 = false; toast('Call extended to ' + clockLabel(endAt)); }
-        if (m.type === 'bye') finish('Your partner left', 'They hung up.');
-        };
-        ch.onclose = () => { if (!ended) finish('Your partner left', 'The connection closed.'); };
-    }
-
-    /* ---------- host ---------- */
-    $('create').onclick = async () => {
-        $('setup-err').textContent = '';
-        if (mode === 'dur'){
-        pendingDur = Math.round(Number($('mins').value));
-        if (!(pendingDur >= 1)) return $('setup-err').textContent = 'Enter a length of at least 1 minute.';
-        } else {
-        if (!$('clock-in').value) return $('setup-err').textContent = 'Choose an end time.';
-        pendingClock = nextClockTime($('clock-in').value);
-        }
-        try { initDb(); } catch(e){ return $('setup-err').textContent = explain(e); }
-        try { await getMedia(); }
-        catch(e){ return $('setup-err').textContent = 'Camera or microphone is blocked. Allow access in your browser, then try again.'; }
-        try {
-        isHost = true;
-        const id = 'j' + Math.random().toString(36).slice(2, 8) + Math.random().toString(36).slice(2, 8);
-        roomRef = db.collection('rooms').doc(id);
-        newPC('hostCand');
-        wireDC(pc.createDataChannel('ctl'));
-        const offer = await pc.createOffer();
-        await pc.setLocalDescription(offer);
-        await roomRef.set({offer:{type:offer.type, sdp:offer.sdp}, created:Date.now()});
-        unsubs.push(roomRef.onSnapshot(async s => {
-            const d = s.data();
-            if (d && d.answer && pc && !pc.remoteDescription){ await pc.setRemoteDescription(d.answer); flushCands(); }
-        }));
-        watchCands('guestCand');
-        const base = (SITE_URL || location.href.split('#')[0]).split('#')[0];
-        $('link').value = base + '#r=' + id;
-        $('wait-note').textContent = mode === 'dur'
-            ? 'The ' + pendingDur + '-minute timer starts when they join.'
-            : 'The call ends at ' + clockLabel(pendingClock) + '.';
-        show('wait');
-        } catch(e){
-        $('setup-err').textContent = explain(e);
-        teardown(); show('setup');
-        }
+  }
+  function diag(){
+    if (!pc) return '';
+    const c = Object.keys(cands).map(k => k + ' ' + cands[k]).join(', ') || 'none';
+    return 'ice ' + pc.iceConnectionState + '; gathering ' + pc.iceGatheringState + '; my candidates: ' + c + '; received from partner: ' + remoteN + '; relay servers set: ' + TURN_SERVERS.length;
+  }
+  function failMsg(){
+    if (!TURN_SERVERS.length) return 'Your two networks couldn’t connect directly. A relay (TURN) server needs to be added in index.html.';
+    if (!cands.relay) return 'The relay server didn’t respond. Check the TURN username and password in index.html.';
+    return 'Your networks couldn’t connect, even through the relay. Try a different network.';
+  }
+  function addCand(c){
+    remoteN++;
+    if (pc && pc.remoteDescription) pc.addIceCandidate(new RTCIceCandidate(c)).catch(() => {});
+    else queue.push(c);
+  }
+  function flushCands(){ queue.splice(0).forEach(addCand); }
+  function watchCands(coll){
+    unsubs.push(roomRef.collection(coll).onSnapshot(s => s.docChanges().forEach(ch => { if (ch.type === 'added') addCand(ch.doc.data()); })));
+  }
+  const send = m => { if (dc && dc.readyState === 'open') dc.send(JSON.stringify(m)); };
+  function wireDC(ch){
+    dc = ch;
+    ch.onopen = () => {
+      if (isHost){
+        const now = Date.now();
+        startedAt = now;
+        endAt = mode === 'dur' ? now + pendingDur * 60000 : pendingClock;
+        totalMs = endAt - now;
+        send({type:'end', endAt, totalMs});
+        startClock();
+      }
     };
-    $('copy').onclick = async () => {
-        try { await navigator.clipboard.writeText($('link').value); $('copy').textContent = 'Copied'; }
-        catch(e){ $('link').select(); $('copy').textContent = 'Press Ctrl+C'; }
-        setTimeout(() => $('copy').textContent = 'Copy love link 💌', 1800);
+    ch.onmessage = e => {
+      const m = JSON.parse(e.data);
+      if (m.type === 'end'){ endAt = m.endAt; totalMs = m.totalMs; startedAt = Date.now(); startClock(); }
+      if (m.type === 'extend'){ endAt = m.endAt; totalMs = Math.max(totalMs, endAt - startedAt); warned5 = warned1 = false; toast('Call extended to ' + clockLabel(endAt)); }
+      if (m.type === 'bye') finish('Your partner left', 'They hung up.');
     };
-    $('cancel').onclick = () => { teardown(); location.hash = ''; show('setup'); };
+    ch.onclose = () => { if (!ended) finish('Your partner left', 'The connection closed.'); };
+  }
 
-    /* ---------- guest ---------- */
-    function joinFail(msg){ teardown(); $('join-err').textContent = msg; $('join-btn').disabled = false; $('join-btn').textContent = 'Join our date 💗'; show('join'); }
-    $('join-btn').onclick = async () => {
-        $('join-err').textContent = '';
-        try { initDb(); } catch(e){ return $('join-err').textContent = explain(e); }
-        try { await getMedia(); }
-        catch(e){ return $('join-err').textContent = 'Camera or microphone is blocked. Allow access in your browser, then try again.'; }
-        $('join-btn').disabled = true; $('join-btn').textContent = 'Connecting…';
-        try {
-        roomRef = db.collection('rooms').doc(roomFromUrl());
-        const snap = await roomRef.get();
-        const d = snap.exists && snap.data();
-        if (!d || !d.offer || d.answer) return joinFail('This call isn’t open. Ask your partner to create a new call and send the new link.');
-        newPC('guestCand');
-        pc.ondatachannel = e => wireDC(e.channel);
-        await pc.setRemoteDescription(d.offer);
-        flushCands();
-        const ans = await pc.createAnswer();
-        await pc.setLocalDescription(ans);
-        await roomRef.update({answer:{type:ans.type, sdp:ans.sdp}});
-        watchCands('hostCand');
-        joinTimer = setTimeout(() => { if (!connected) joinFail('Couldn’t connect. Ask your partner to keep their tab open, or create a new call.'); }, 20000);
-        } catch(e){ joinFail(explain(e)); }
-    };
-
-    /* ---------- clock ---------- */
-    const clockLabel = t => new Date(t).toLocaleTimeString([], {hour:'numeric', minute:'2-digit'});
-    const fmt = ms => {
-        const s = Math.max(0, Math.ceil(ms / 1000)), h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), x = s % 60;
-        return (h ? h + ':' + String(m).padStart(2, '0') : m) + ':' + String(x).padStart(2, '0');
-    };
-    function startClock(){
-        clearInterval(tick);
-        const loop = () => {
-        const left = endAt - Date.now();
-        $('clock').textContent = fmt(left);
-        $('drain').style.transform = 'scaleX(' + Math.max(0, Math.min(1, left / totalMs)) + ')';
-        const w = left <= 300000, c = left <= 60000;
-        $('clock').className = c ? 'crit' : w ? 'warn' : '';
-        $('drain').className = c ? 'crit' : w ? 'warn' : '';
-        if (left <= 300000 && !warned5 && totalMs > 360000){ warned5 = true; toast('Only 5 more minutes together 💗'); }
-        if (left <= 60000 && !warned1){ warned1 = true; toast('One last minute, love ♡'); }
-        if (left <= 0) finish('Our little date is over ♡', 'The call ended at ' + clockLabel(endAt) + '.', true);
-        };
-        loop(); tick = setInterval(loop, 250);
+  /* ---------- host ---------- */
+  $('create').onclick = async () => {
+    $('setup-err').textContent = '';
+    if (mode === 'dur'){
+      pendingDur = Math.round(Number($('mins').value));
+      if (!(pendingDur >= 1)) return $('setup-err').textContent = 'Enter a length of at least 1 minute.';
+    } else {
+      if (!$('clock-in').value) return $('setup-err').textContent = 'Choose an end time.';
+      pendingClock = nextClockTime($('clock-in').value);
     }
-    let toastT;
-    function toast(t){ const el = $('toast'); el.textContent = t; el.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => el.classList.remove('show'), 4000); }
-
-    /* ---------- controls ---------- */
-    $('mic').onclick = () => {
-        const t = stream.getAudioTracks()[0]; t.enabled = !t.enabled;
-        $('mic').setAttribute('aria-pressed', !t.enabled); $('mic').textContent = t.enabled ? '🎙️ Mute' : '🔇 Unmute';
-    };
-    $('cam').onclick = () => {
-        const t = stream.getVideoTracks()[0]; t.enabled = !t.enabled;
-        $('cam').setAttribute('aria-pressed', !t.enabled); $('cam').textContent = t.enabled ? '📷 Camera' : '📷 Camera on';
-    };
-    $('plus').onclick = () => {
-        endAt += 300000; warned5 = warned1 = false;
-        totalMs = Math.max(totalMs, endAt - startedAt);
-        send({type:'extend', endAt});
-        toast('Extended to ' + clockLabel(endAt));
-    };
-    $('hang').onclick = () => { send({type:'bye'}); finish('See you soon, love ♡', 'Every moment together is special. 💗'); };
-
-    /* ---------- end ---------- */
-    async function cleanupRoom(ref){
-        try {
-        for (const c of ['hostCand','guestCand']){
-            const s = await ref.collection(c).get();
-            await Promise.all(s.docs.map(d => d.ref.delete()));
-        }
-        await ref.delete();
-        } catch(e){}
+    try { initDb(); } catch(e){ return $('setup-err').textContent = explain(e); }
+    try { await getMedia(); }
+    catch(e){ return $('setup-err').textContent = 'Camera or microphone is blocked. Allow access in your browser, then try again.'; }
+    try {
+      isHost = true;
+      const id = 'j' + Math.random().toString(36).slice(2, 8) + Math.random().toString(36).slice(2, 8);
+      roomRef = db.collection('rooms').doc(id);
+      newPC('hostCand');
+      wireDC(pc.createDataChannel('ctl'));
+      const offer = await pc.createOffer();
+      await pc.setLocalDescription(offer);
+      await roomRef.set({offer:{type:offer.type, sdp:offer.sdp}, created:Date.now()});
+      unsubs.push(roomRef.onSnapshot(async s => {
+        const d = s.data();
+        if (d && d.answer && pc && !pc.remoteDescription){ await pc.setRemoteDescription(d.answer); flushCands(); }
+      }));
+      watchCands('guestCand');
+      const base = (SITE_URL || location.href.split('#')[0]).split('#')[0];
+      $('link').value = base + '#r=' + id;
+      $('wait-note').textContent = mode === 'dur'
+        ? 'The ' + pendingDur + '-minute timer starts when they join.'
+        : 'The call ends at ' + clockLabel(pendingClock) + '.';
+      show('wait');
+    } catch(e){
+      $('setup-err').textContent = explain(e);
+      teardown(); show('setup');
     }
-    function teardown(){
-        clearInterval(tick); clearTimeout(joinTimer); clearTimeout(dropTimer);
-        unsubs.splice(0).forEach(u => { try { u(); } catch(e){} });
-        try { dc && dc.close(); } catch(e){}
-        try { pc && pc.close(); } catch(e){}
-        if (stream) stream.getTracks().forEach(t => t.stop());
-        if (isHost && roomRef) cleanupRoom(roomRef);
-        stream = pc = dc = null; queue = []; connected = false;
-    }
-    function finish(title, msg, timeUp){
-        if (ended) return; ended = true;
-        $('end-title').textContent = title; $('end-msg').textContent = msg;
-        setTimeout(() => { teardown(); show('end'); }, timeUp ? 400 : 0);
-    }
-    $('again').onclick = () => { location.hash = ''; location.reload(); };
+  };
+  $('copy').onclick = async () => {
+    try { await navigator.clipboard.writeText($('link').value); $('copy').textContent = 'Copied'; }
+    catch(e){ $('link').select(); $('copy').textContent = 'Press Ctrl+C'; }
+    setTimeout(() => $('copy').textContent = 'Copy love link 💌', 1800);
+  };
+  $('cancel').onclick = () => { teardown(); location.hash = ''; show('setup'); };
 
-    /* ---------- boot ---------- */
-    const t = new Date(Date.now() + 3600000);
-    $('clock-in').value = String(t.getHours()).padStart(2, '0') + ':' + String(t.getMinutes()).padStart(2, '0');
-    show(roomFromUrl() ? 'join' : 'setup');
-    window.addEventListener('beforeunload', () => { send({type:'bye'}); if (isHost && roomRef) roomRef.delete().catch(() => {}); });
-    })();
-    </script>
-    </body>
-    </html>
+  /* ---------- guest ---------- */
+  function joinFail(msg){ if (pc) msg += ' (' + diag() + ')'; teardown(); $('join-err').textContent = msg; $('join-btn').disabled = false; $('join-btn').textContent = 'Join our date 💗'; show('join'); }
+  $('join-btn').onclick = async () => {
+    $('join-err').textContent = '';
+    try { initDb(); } catch(e){ return $('join-err').textContent = explain(e); }
+    try { await getMedia(); }
+    catch(e){ return $('join-err').textContent = 'Camera or microphone is blocked. Allow access in your browser, then try again.'; }
+    $('join-btn').disabled = true; $('join-btn').textContent = 'Connecting…';
+    try {
+      roomRef = db.collection('rooms').doc(roomFromUrl());
+      const snap = await roomRef.get();
+      const d = snap.exists && snap.data();
+      if (!d || !d.offer || d.answer) return joinFail('This call isn’t open. Ask your partner to create a new call and send the new link.');
+      newPC('guestCand');
+      pc.ondatachannel = e => wireDC(e.channel);
+      await pc.setRemoteDescription(d.offer);
+      flushCands();
+      const ans = await pc.createAnswer();
+      await pc.setLocalDescription(ans);
+      await roomRef.update({answer:{type:ans.type, sdp:ans.sdp}});
+      watchCands('hostCand');
+      joinTimer = setTimeout(() => { if (!connected) joinFail('Couldn’t connect. Ask your partner to keep their tab open, or create a new call.'); }, 20000);
+    } catch(e){ joinFail(explain(e)); }
+  };
+
+  /* ---------- clock ---------- */
+  const clockLabel = t => new Date(t).toLocaleTimeString([], {hour:'numeric', minute:'2-digit'});
+  const fmt = ms => {
+    const s = Math.max(0, Math.ceil(ms / 1000)), h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), x = s % 60;
+    return (h ? h + ':' + String(m).padStart(2, '0') : m) + ':' + String(x).padStart(2, '0');
+  };
+  function startClock(){
+    clearInterval(tick);
+    const loop = () => {
+      const left = endAt - Date.now();
+      $('clock').textContent = fmt(left);
+      $('drain').style.transform = 'scaleX(' + Math.max(0, Math.min(1, left / totalMs)) + ')';
+      const w = left <= 300000, c = left <= 60000;
+      $('clock').className = c ? 'crit' : w ? 'warn' : '';
+      $('drain').className = c ? 'crit' : w ? 'warn' : '';
+      if (left <= 300000 && !warned5 && totalMs > 360000){ warned5 = true; toast('Only 5 more minutes together 💗'); }
+      if (left <= 60000 && !warned1){ warned1 = true; toast('One last minute, love ♡'); }
+      if (left <= 0) finish('Our little date is over ♡', 'The call ended at ' + clockLabel(endAt) + '.', true);
+    };
+    loop(); tick = setInterval(loop, 250);
+  }
+  let toastT;
+  function toast(t){ const el = $('toast'); el.textContent = t; el.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => el.classList.remove('show'), 4000); }
+
+  /* ---------- controls ---------- */
+  $('mic').onclick = () => {
+    const t = stream.getAudioTracks()[0]; t.enabled = !t.enabled;
+    $('mic').setAttribute('aria-pressed', !t.enabled); $('mic').textContent = t.enabled ? '🎙️ Mute' : '🔇 Unmute';
+  };
+  $('cam').onclick = () => {
+    const t = stream.getVideoTracks()[0]; t.enabled = !t.enabled;
+    $('cam').setAttribute('aria-pressed', !t.enabled); $('cam').textContent = t.enabled ? '📷 Camera' : '📷 Camera on';
+  };
+  $('plus').onclick = () => {
+    endAt += 300000; warned5 = warned1 = false;
+    totalMs = Math.max(totalMs, endAt - startedAt);
+    send({type:'extend', endAt});
+    toast('Extended to ' + clockLabel(endAt));
+  };
+  $('hang').onclick = () => { send({type:'bye'}); finish('See you soon, love ♡', 'Every moment together is special. 💗'); };
+
+  /* ---------- end ---------- */
+  async function cleanupRoom(ref){
+    try {
+      for (const c of ['hostCand','guestCand']){
+        const s = await ref.collection(c).get();
+        await Promise.all(s.docs.map(d => d.ref.delete()));
+      }
+      await ref.delete();
+    } catch(e){}
+  }
+  function teardown(){
+    clearInterval(tick); clearTimeout(joinTimer); clearTimeout(dropTimer);
+    unsubs.splice(0).forEach(u => { try { u(); } catch(e){} });
+    try { dc && dc.close(); } catch(e){}
+    try { pc && pc.close(); } catch(e){}
+    if (stream) stream.getTracks().forEach(t => t.stop());
+    if (isHost && roomRef) cleanupRoom(roomRef);
+    stream = pc = dc = null; queue = []; cands = {}; remoteN = 0; connected = false; $('status').hidden = false;
+  }
+  function finish(title, msg, timeUp){
+    if (ended) return; ended = true;
+    $('end-title').textContent = title; $('end-msg').textContent = msg;
+    $('end-dbg').textContent = title === 'Connection lost' ? 'Details: ' + diag() : '';
+    setTimeout(() => { teardown(); show('end'); }, timeUp ? 400 : 0);
+  }
+  $('again').onclick = () => { location.hash = ''; location.reload(); };
+
+  /* ---------- boot ---------- */
+  const t = new Date(Date.now() + 3600000);
+  $('clock-in').value = String(t.getHours()).padStart(2, '0') + ':' + String(t.getMinutes()).padStart(2, '0');
+  show(roomFromUrl() ? 'join' : 'setup');
+  window.addEventListener('beforeunload', () => { send({type:'bye'}); if (isHost && roomRef) roomRef.delete().catch(() => {}); });
+})();
+</script>
+</body>
+</html>
